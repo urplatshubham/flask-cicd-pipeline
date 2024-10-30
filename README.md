@@ -1,5 +1,5 @@
-# Flask CI/CD Pipeline with GitHub Actions
-This repo showcases a simple Flask app and a GitHub Actions workflow that handles basic CI/CD tasks – from installing dependencies to simulating staging and production deployments.
+# Flask CI/CD Pipeline with GitHub Actions & Jenkins
+This repo showcases a simple Flask app and a GitHub Actions workflow & Jenkins that handles basic CI/CD tasks – from installing dependencies to simulating staging and production deployments.
 
 ## Overview
 
