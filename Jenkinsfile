@@ -2,16 +2,17 @@ pipeline {
     agent any
 
     environment {
-        // Define environment variables for staging and production
-        STAGING_ENV = "Simulating staging deployment"
-        PRODUCTION_ENV = "Simulating production deployment"
+        // Define environment variables for staging and production messages
+        STAGING_MESSAGE = "Simulating staging deployment"
+        PRODUCTION_MESSAGE = "Simulating production deployment"
     }
 
     stages {
         stage('Checkout Code') {
             steps {
                 echo 'Checking out code...'
-                checkout scm
+                // Manually clone the repository
+                sh 'git clone https://github.com/urplatshubham/flask-cicd-pipeline .'
             }
         }
 
@@ -19,9 +20,9 @@ pipeline {
             steps {
                 echo 'Installing dependencies...'
                 sh '''
-                python3 -m venv venv
-                . venv/bin/activate
-                pip install -r requirements.txt
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install -r requirements.txt
                 '''
             }
         }
@@ -30,8 +31,8 @@ pipeline {
             steps {
                 echo 'Running tests...'
                 sh '''
-                . venv/bin/activate
-                pytest
+                    . venv/bin/activate
+                    pytest
                 '''
             }
         }
@@ -40,29 +41,29 @@ pipeline {
             steps {
                 echo 'Building the application...'
                 sh '''
-                # Placeholder for build commands
-                echo "Build complete"
+                    echo "Build stage complete"
                 '''
             }
         }
 
         stage('Deploy to Staging') {
             when {
-                branch 'staging'
+                branch 'staging' // Only run when pushing to the staging branch
             }
             steps {
                 echo 'Deploying to staging environment...'
-                echo "${STAGING_ENV}"
+                echo "${STAGING_MESSAGE}"
             }
         }
 
         stage('Deploy to Production') {
             when {
+                // Only run on tagged commits with pattern vX.Y (e.g., v1.0)
                 expression { return env.GIT_TAG_NAME ==~ /^v[0-9]+(\\.[0-9]+)*$/ }
             }
             steps {
                 echo 'Deploying to production environment...'
-                echo "${PRODUCTION_ENV}"
+                echo "${PRODUCTION_MESSAGE}"
             }
         }
     }
@@ -72,8 +73,7 @@ pipeline {
             echo 'Pipeline completed successfully!'
         }
         failure {
-            echo 'Pipeline failed. Please check the logs for details.'
+            echo 'Pipeline failed. Check logs for details.'
         }
     }
 }
-
